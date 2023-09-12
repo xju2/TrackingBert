@@ -1,5 +1,4 @@
 # TrackingBert
----------------
 BERT Model for Track Reconstruction in HEP Analysis
 
 ## Setup
@@ -27,7 +26,7 @@ pip install -e .
 
 ## Dataset
 * Use internal pre-processed dataset: `/global/cfs/cdirs/m3443/data/trackml-kaggle/train_all`
-* Download dataset manually: https://www.kaggle.com/competitions/trackml-particle-identification/data
+* Or download dataset manually: https://www.kaggle.com/competitions/trackml-particle-identification/data
 
 ## Code Structure
 * `process_data.py`: processing data into `.npz` files, code can be run in parallel and hence creating multiple files simultaneously
