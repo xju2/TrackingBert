@@ -17,9 +17,9 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from functools import partial
 
-from acctrack.io.base import BaseReader
-from acctrack.io import MeasurementData
-from acctrack.io.utils import make_true_edges
+from acctrack.io.base import BaseTrackDataReader
+# from acctrack.io import MeasurementData
+from acctrack.io.utils_feature_store import make_true_edges
 from acctrack.io.trackml_cell_info import add_cluster_shape
 from acctrack.io.trackml_detector import load_detector
 
@@ -44,16 +44,16 @@ def remove_noise_hits(hits):
     hits = hits[hits.hit_type != 'noise']
     return hits
 
-class TrackMLReader(BaseReader):
+class TrackMLReader(BaseTrackDataReader):
     """
     TrackML Reader copied from the acctrack library, with adjustment on data processing.
     """
-    def __init__(self, basedir, detector_path, name="TrackMLReader") -> None:
-        super().__init__(basedir, name)
+    def __init__(self, inputdir, detector_path, name="TrackMLReader") -> None:
+        super().__init__(inputdir, name)
 
         # count how many events in the directory
         all_evts = glob.glob(os.path.join(
-            self.basedir, "event*-hits.csv"))
+            self.inputdir, "event*-hits.csv"))
 
         self.nevts = len(all_evts)
         pattern = "event([0-9]*)-hits.csv"
@@ -62,20 +62,20 @@ class TrackMLReader(BaseReader):
                 for x in all_evts])
 
         print("total {} events in directory: {}".format(
-            self.nevts, self.basedir))
+            self.nevts, self.inputdir))
         
-        #detector_path = os.path.join(self.basedir, "../detectors.csv")
+        #detector_path = os.path.join(self.inputdir, "../detectors.csv")
         _, self.detector = load_detector(detector_path)
 
 
-    def read(self, evtid: int = None) -> MeasurementData:
+    def read(self, evtid: int = None):
         """Read one event from the input directory"""
 
         if (evtid is None or evtid < 1) and self.nevts > 0:
             evtid = self.all_evtids[0]
             print("read event {}".format(evtid))
 
-        prefix = os.path.join(self.basedir, "event{:09d}".format(evtid))
+        prefix = os.path.join(self.inputdir, "event{:09d}".format(evtid))
         hit_fname = "{}-hits.csv".format(prefix)
         cell_fname = "{}-cells.csv".format(prefix)
         particle_fname = "{}-particles.csv".format(prefix)

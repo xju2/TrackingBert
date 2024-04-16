@@ -20,27 +20,14 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        "tensorflow==2.6",
-        "keras==2.6",
-        "future",
-        "networkx",
-        "numpy",
-        "scipy",
-        "pandas",
-        "tables",
-        "setuptools",
-        "six",
-        "matplotlib",
-        "sklearn",
-        'pyyaml>=5.1',
-        'tqdm'
+
     ],
     package_data = {
         "TrackingBert": ["*.py"]
     },
     setup_requires=[],
     classifiers=[
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.9",
     ],
     scripts=[],
 )
